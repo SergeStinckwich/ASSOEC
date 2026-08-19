@@ -1,0 +1,51 @@
+;; disease_engine_tests.nls — characterization tests for the disease/engine seam.
+;; Run headless via the "disease-engine-tests" BehaviorSpace experiment, or from the
+;; Command Center:  run-disease-engine-tests
+
+globals [ #disease-engine-checks ]
+
+to assert-equal [actual expected msg]
+  set #disease-engine-checks #disease-engine-checks + 1
+  if actual != expected [
+    print (word "FAIL: " msg " — expected " expected " got " actual)
+    error (word "disease-engine test FAILED: " msg)
+  ]
+end
+
+;; every concrete Ebola state the FSM can occupy
+to-report all-ebola-states
+  report (list
+    "healthy" "just-contaminated" "infected-stage-1" "infected-stage-1.5"
+    "infected-stage-2" "hospitalised" "non-hospitalised" "h-to-immune"
+    "dead-infectious" "safe-burial" "unsafe-burial" "immune" "removed")
+end
+
+to run-disease-engine-tests
+  set #disease-engine-checks 0
+  test-property-predicates
+  print (word "disease-engine tests: ALL PASS (" #disease-engine-checks " checks)")
+end
+
+;; expected: [ state  infected?  hospitalised?  severe? ]  (from spec section 3.1)
+to test-property-predicates
+  foreach (list
+    (list "healthy"            false false false)
+    (list "just-contaminated"  false false false)
+    (list "infected-stage-1"   true  false false)
+    (list "infected-stage-1.5" true  false false)
+    (list "infected-stage-2"   true  false true)
+    (list "hospitalised"       true  true  true)
+    (list "non-hospitalised"   true  false true)
+    (list "h-to-immune"        true  true  false)
+    (list "dead-infectious"    true  false false)
+    (list "safe-burial"        false false false)
+    (list "unsafe-burial"      true  false false)
+    (list "immune"             true  false false)
+    (list "removed"            false false false)
+  ) [ row ->
+    let s item 0 row
+    assert-equal (is-infected-infection-status? s)     (item 1 row) (word "is-infected? " s)
+    assert-equal (is-hospitalised-infection-state? s)  (item 2 row) (word "is-hospitalised? " s)
+    assert-equal (is-severe-infection-state? s)        (item 3 row) (word "is-severe? " s)
+  ]
+end

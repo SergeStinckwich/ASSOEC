@@ -1,0 +1,4 @@
+# Regression baseline for disease/engine refactor — TO BE CAPTURED IN NETLOGO GUI.
+# Procedure: random-seed 42 / setup-ebola / repeat 200 [ go ] /
+#   print (list ticks #infected #hospitalised #dead-people #safely-buried #unsafely-buried)
+# Paste the resulting list on the line below.

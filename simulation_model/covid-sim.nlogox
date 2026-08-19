@@ -1628,6 +1628,14 @@ At the start of each tick, people with less than 20 get 20$, so they don't end-u
   </linkShapes>
   <previewCommands>setup repeat 75 [ go ]</previewCommands>
   <experiments>
+    <experiment name="disease-engine-tests" repetitions="1" sequentialRunOrder="true" runMetricsEveryStep="false" timeLimit="1">
+      <setup>run-disease-engine-tests</setup>
+      <go>stop</go>
+      <exitCondition>true</exitCondition>
+      <metrics>
+        <metric>#disease-engine-checks</metric>
+      </metrics>
+    </experiment>
     <experiment name="experiment" repetitions="1" sequentialRunOrder="true" runMetricsEveryStep="true" timeLimit="3">
       <setup>load-population-profile-based-on-current-preset-profile
 setup</setup>
