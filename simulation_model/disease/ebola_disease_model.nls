@@ -132,3 +132,16 @@ to-report tau-bur
   report 3 * #ticks-per-day
 end
 
+;; ---- canonical disease interface (engine calls only these) ----
+to-report disease-next-state [s]
+  report next-state-ebo s
+end
+
+to-report disease-initial-status
+  report just-exposed-infection-status
+end
+
+to-report disease-relative-infectiousness [s]
+  report ebo-relative-infection-rate-of-infection-status s
+end
+

@@ -24,6 +24,7 @@ to run-disease-engine-tests
   build-disease-state-property-table
   set #disease-engine-checks 0
   test-property-predicates
+  test-susceptible-immune
   print (word "disease-engine tests: ALL PASS (" #disease-engine-checks " checks)")
 end
 
@@ -50,4 +51,10 @@ to test-property-predicates
     assert-equal (is-severe-infection-state? s)        (item 3 row) (word "is-severe? " s)
     assert-equal (state-has? s "critical-symptoms")    (item 4 row) (word "critical? " s)
   ]
+end
+
+to test-susceptible-immune
+  assert-equal (state-has? "healthy" "susceptible") true  "susceptible healthy"
+  assert-equal (state-has? "immune"  "immune")      true  "immune immune"
+  assert-equal (state-has? "healthy" "immune")      false "healthy not immune"
 end

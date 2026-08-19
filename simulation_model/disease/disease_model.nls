@@ -19,9 +19,7 @@ globals [
 
 
 to set-contaminated-disease-status
- ; if  disease-fsm-model = "assocc" [set-infection-status infected-asymptomatic-status]
- ; if  disease-fsm-model = "oxford" [set-infection-status just-contaminated-infection-status]
-  if disease-fsm-model = "ebola" [set-infection-status just-exposed-infection-status]
+  set-infection-status disease-initial-status
   set time-when-infected ticks
 end
 
@@ -33,16 +31,11 @@ to-report infection-status
 end
 
 to-report is-immune?
-   ; if  disease-fsm-model = "oxford" [  report infection-status = immune-infection-status]
-  if disease-fsm-model = "ebola" [
-    report infection-status = immune-infection-status] ;AD HOC STATIC STATE
+  report state-has? infection-status "immune"
 end
 
- to-report is-susceptible?
-;   if disease-fsm-model = "oxford" [
-;   report infection-state = healthy-infection-status]
-if disease-fsm-model = "ebola" [
-    report infection-state = susceptible-infection-status]
+to-report is-susceptible?
+  report state-has? infection-state "susceptible"
 end
 
 
@@ -55,10 +48,7 @@ to set-immune
 end
 
 to-report next-infection-state
- ; if disease-fsm-model = "assocc" [update-disease-status-assocc] 
- ; if disease-fsm-model = "oxford" [report next-state-odm infection-state]
-    if disease-fsm-model = "ebola" [report next-state-ebo infection-state]
-  error "unimplemented"
+  report disease-next-state infection-state
 end
 
 
