@@ -25,6 +25,7 @@ to run-disease-engine-tests
   set #disease-engine-checks 0
   test-property-predicates
   test-susceptible-immune
+  test-contagion-predicates
   print (word "disease-engine tests: ALL PASS (" #disease-engine-checks " checks)")
 end
 
@@ -57,4 +58,14 @@ to test-susceptible-immune
   assert-equal (state-has? "healthy" "susceptible") true  "susceptible healthy"
   assert-equal (state-has? "immune"  "immune")      true  "immune immune"
   assert-equal (state-has? "healthy" "immune")      false "healthy not immune"
+end
+
+to test-contagion-predicates
+  ;; is-contagious? == "infectious" tag (spec 2.3 preserves immune-as-contagious)
+  assert-equal (member? "infectious" disease-state-properties "just-contaminated") false "exposed not contagious"
+  assert-equal (member? "infectious" disease-state-properties "infected-stage-2")  true  "stage-2 contagious"
+  assert-equal (member? "infectious" disease-state-properties "safe-burial")       false "safe-burial not contagious"
+  assert-equal (member? "infectious" disease-state-properties "unsafe-burial")     true  "unsafe-burial contagious"
+  assert-equal (member? "removed" disease-state-properties "removed")              true  "removed is removed"
+  assert-equal (member? "buried-safe" disease-state-properties "safe-burial")      true  "safe-burial buried-safe"
 end

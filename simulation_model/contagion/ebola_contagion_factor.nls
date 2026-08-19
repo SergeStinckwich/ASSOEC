@@ -252,3 +252,8 @@ to-report ebo-cdf-gamma-value-means-6-sd-2.5 [t]
     if t > 25 [ report 0]
     error (sentence "unimplemented for" t)
 end
+
+;; canonical disease interface
+to-report disease-contagion-factor [infector susceptible context]
+  report ebola-contagion-factor-between infector susceptible context
+end

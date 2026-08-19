@@ -117,8 +117,7 @@ to apply-risk-of-contamination [infector context]
 end
 
 to-report risks-of-contamination [infector susceptible context]
-  if contagion-model = "ebola" [report (ebola-contagion-factor-between infector susceptible context) ]
-  error (sentence "not implemented for" contagion-model)
+  report disease-contagion-factor infector susceptible context
 end
 
 
@@ -189,11 +188,13 @@ end
 ;;CHANGED FOR EBOLA
 
 to-report is-contagious?
-  report not (infection-status = susceptible-infection-status) and not (infection-status = "just-contaminated") and not (infection-status = "removed") and not (infection-status = "safe-burial")
+  report state-has? infection-status "infectious"
 end
 
 to-report is-alive?
-  report not (infection-status = "removed") and not (infection-status = "safe-burial") and not (infection-status = "unsafe-burial")
+  report not state-has? infection-status "removed"
+     and not state-has? infection-status "buried-safe"
+     and not state-has? infection-status "buried-unsafe"
 end
 
 to-report abc
