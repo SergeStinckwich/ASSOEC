@@ -1,4 +1,4 @@
-__includes [ "contagion/ebola_contagion_factor.nls"]
+;; contagion.nls — disease-AGNOSTIC spread mechanics. Calls disease-contagion-factor.
 
 to spread-contagion
   ;spread-by-travelling

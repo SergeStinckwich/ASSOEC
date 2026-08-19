@@ -1,4 +1,5 @@
-__includes [ "disease/ebola_profiles.nls" "disease/ebola_disease_model.nls" "disease/diseases/ebola/ebola_properties.nls"] ; "disease/disease_profiles.nls"  "disease/oxford_disease_model.nls"
+;; disease_engine.nls — disease-AGNOSTIC. Understands only the property vocabulary
+;; and the six canonical disease-* reporters. No disease-specific files are included here.
 
 
 globals [  

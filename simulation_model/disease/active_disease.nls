@@ -1,0 +1,9 @@
+;; active_disease.nls — SELECTS THE ACTIVE DISEASE.
+;; To switch diseases, change only the include paths below to another folder
+;; under disease/diseases/ that provides the six canonical reporters.
+__includes [
+  "disease/diseases/ebola/ebola_profiles.nls"
+  "disease/diseases/ebola/ebola_disease_model.nls"
+  "disease/diseases/ebola/ebola_properties.nls"
+  "disease/diseases/ebola/ebola_contagion_factor.nls"
+]
