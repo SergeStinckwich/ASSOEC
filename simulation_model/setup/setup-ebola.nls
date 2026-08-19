@@ -8,7 +8,8 @@ globals[]
 to setup-ebola
   clear-all
   reset-ticks
-  
+  build-disease-state-property-table
+
    if clear-log-on-setup? [clear-logfile]
    if log? [print "debug mode active; this dramatically slows down computation speed"]
 ;   check-parameters

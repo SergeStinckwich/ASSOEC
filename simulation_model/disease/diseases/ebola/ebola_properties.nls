@@ -1,0 +1,28 @@
+;; ebola_properties.nls — the ONLY place Ebola state semantics live.
+;; Tags come from the engine's fixed property vocabulary.
+
+to build-disease-state-property-table
+  set disease-state-property-table table:make
+  declare-state "healthy"            ["susceptible"]
+  declare-state "just-contaminated"  ["exposed"]
+  declare-state "infected-stage-1"   ["infectious"]
+  declare-state "infected-stage-1.5" ["infectious"]
+  declare-state "infected-stage-2"   ["infectious" "severe" "critical-symptoms" "visible-symptoms"]
+  declare-state "hospitalised"       ["infectious" "severe" "hospitalised" "critical-symptoms" "visible-symptoms"]
+  declare-state "non-hospitalised"   ["infectious" "severe" "critical-symptoms"]
+  declare-state "h-to-immune"        ["infectious" "hospitalised"]
+  declare-state "dead-infectious"    ["infectious" "dead"]
+  declare-state "safe-burial"        ["dead" "buried-safe"]
+  declare-state "unsafe-burial"      ["infectious" "dead" "buried-unsafe"]
+  declare-state "immune"             ["infectious" "immune"]
+  declare-state "removed"            ["removed"]
+end
+
+to declare-state [name tags]
+  table:put disease-state-property-table name tags
+end
+
+;; canonical disease reporter: the tag list for a concrete state
+to-report disease-state-properties [s]
+  report table:get disease-state-property-table s
+end

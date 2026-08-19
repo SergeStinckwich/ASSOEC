@@ -1,4 +1,4 @@
-__includes [ "disease/ebola_profiles.nls" "disease/ebola_disease_model.nls"] ; "disease/disease_profiles.nls"  "disease/oxford_disease_model.nls"
+__includes [ "disease/ebola_profiles.nls" "disease/ebola_disease_model.nls" "disease/diseases/ebola/ebola_properties.nls"] ; "disease/disease_profiles.nls"  "disease/oxford_disease_model.nls"
 
 
 globals [  
@@ -14,6 +14,7 @@ globals [
   #removed
    infected-people
   list-of-dead-and-safely-buried-people ;to remove
+  disease-state-property-table
 ]
 
 
@@ -82,101 +83,30 @@ end
 
 
 
- to-report is-hospitalised-infection-state? [infection]
-   if is-timed-state? infection [report is-infected-infection-status? state-of-timed-state infection]
-   if infection = "hospitalised"
-  or infection = "h-to-immune"
-  or infection = hospitalised-to-dead-infectious-infection-status
-   [report true]
-  
-  if infection = "immune"
-  or infection = "removed"
-  or infection = "non-hospitalised"
-  or infection = "infected-stage-2"
-  or infection = "infected-stage-1.5"
-  or infection = "infected-stage-1"
-  or infection = "just-contaminated"
-  or infection = "removed"
-  or infection = "dead-infectious"
-  or infection = "dead"
-  or infection = "safe-burial"
-  or infection = "unsafe-burial"
-  [report false]
-  
-  error (sentence "not implemented for:" infection)  
- end
-
-
-to-report is-severe-infection-state? [in]
-   if is-timed-state? in [report is-infected-infection-status? state-of-timed-state in]
-  if in = "infected-stage-2"
-  or in = "hospitalized"
-  or in = "non-hospitalized"
-  [report true]
-  
-if in = "healthy"
-  or in = "infected-stage-1"
-  or in = "infected-stage-1.5"
-  or in = "immune"
-    or in = "h-to-immune"
-  or in = "just-contaminated"
-  or in = "removed"
-  or in = "dead-infectious"
-  or in = "dead"
-  or in = "safe-burial"
-  or in = "unsafe-burial"
-  
-  [report false]
-  error (sentence "not implemented for:" in)
+;; unwrap a timed-state [state time] down to its concrete state string
+to-report concrete-state-of [s]
+  ifelse is-timed-state? s [ report state-of-timed-state s ] [ report s ]
 end
 
-
-
-to-report is-infected-infection-status? [in]
-  if is-timed-state? in [report is-infected-infection-status? state-of-timed-state in]
-  
-  if in = "infected-stage-1"
-  or in = "infected-stage-1.5"
-  or in = "infected-stage-2"
-  or in = "hospitalised"
-  or in = "non-hospitalised"
-  or in = "dead-infectious"
-  or in = "unsafe-burial" ;Emil added
-    or in = "h-to-immune"
-  or in = "immune"  
-  [report true]
-  
-  if in = "just-contaminated"
-  or in = "susceptible"
-  or in = "safe-burial" ;Emil added
-
-  or in = "removed"
-  or in = "healthy"
-  [report false]
-  
-  error (sentence "not implemented for:" in)
+;; does state s carry property tag `tag` from the disease's property table?
+to-report state-has? [s tag]
+  report member? tag disease-state-properties concrete-state-of s
 end
 
+to-report is-hospitalised-infection-state? [s]
+  report state-has? s "hospitalised"
+end
 
-to-report is-observing-critical-symptoms?  
-  if infection-status = "hospitalised"
-  or infection-status = "non-hospitalised"
-  or infection-status = "infected-stage-2"
-  [report true]
-  
-  if infection-status = "infected-stage-1"
-  or infection-status = "infected-stage-1.5"
-  or infection-status = "just-contaminated"
-  or infection-status = "dead-infectious"
-  or infection-status = "safe-burial" ;Emil added
-  or infection-status = "unsafe-burial" ;Emil added
-    or infection-status = "h-to-immune"
-  or infection-status = "immune"
-  [report false]
-  
-  
-  error (sentence "not implemented for:" infection-status)
-  error "not implemented"
+to-report is-severe-infection-state? [s]
+  report state-has? s "severe"
+end
+
+to-report is-infected-infection-status? [s]
+  report state-has? s "infectious"
+end
+
+to-report is-observing-critical-symptoms?
+  report state-has? infection-status "critical-symptoms"
 end
 
 
@@ -186,13 +116,8 @@ end
 
 ;simplification, with a more advanced model, these symptoms might be visible after a few days of incubation
 ;might depend on age (e.g. more visible for the elderly, might be undetected for kids)
-to-report has-internally-visible-symptoms?  
-  ifelse infection-status = "hospitalised"
-  or infection-status = "infected-stage-2"
-  [report true]  
-  [report false]
-  
-  error (sentence "not implemented for:" infection-status)
+to-report has-internally-visible-symptoms?
+  report state-has? infection-status "visible-symptoms"
 end
 
 
