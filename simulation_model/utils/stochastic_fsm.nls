@@ -1,6 +1,3 @@
-
-;;TRANSITIONING TO EBOLA, no changes for now
-
 to-report stochastic-fsm-transition [list-of-entries]
   if length last list-of-entries = 1
   [
@@ -16,12 +13,24 @@ to-report stochastic-fsm-transition [list-of-entries]
   report list-of-entries
 end
 
+; structure to represent state with time
 to-report timed-state [state time]
   report (list state time)
 end
 
-to-report is-timed-state? [s]
-  report is-list? s and length s = 2 and is-number? last s
+;state over timed state
+to-report state-of-timed-state [state]
+  report first state
+end
+
+;time over timed state
+to-report time-of-timed-state [state]
+  report last state
+end
+
+; check if state is a timed-state
+to-report is-timed-state? [state]
+  report is-list? state and length state = 2 and is-number? last state
 end
 
 to tographviz-fsm [s0 trans-fun]
@@ -51,15 +60,6 @@ to-report probability-of-reaching [it trans]
   report last (item (position it states-of trans) trans)
 end
 
-;state over time
-to-report state-of-timed-state [ts]
-  report first ts
-end
-
-;time handling
-to-report time-of-timed-state [ts]
-  report last ts
-end
 
 ;for logging
 to-report to-dot-string [s]
